@@ -31,7 +31,11 @@ def handle_message(event):
     msg_lower = message.lower()
 
     if (msg_lower == "/forgetme"):
-        pass
+        source_id = get_source_id(event)
+        Participant.delete().where(Participant.line_mid == source_id).execute()
+        response = TextSendMessage(text="Identitas samaran kamu sudah diganti.")
+        line_bot_api.reply_message(event.reply_token, response)
+
     elif (message == '/uid'):
         source_id = get_source_id(event)
         response = TextSendMessage(text=source_id)

@@ -5,7 +5,7 @@ import bot
 import json
 
 app = Flask(__name__)
-app.debug = True
+app.debug = False
 
 @app.route("/line-webhook", methods=['POST'])
 def line_callback():

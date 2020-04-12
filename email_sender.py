@@ -8,7 +8,6 @@ smtphost = f"{config.get('smtp_host')}:{config.get('smtp_port')}"
 
 def send_email(from_email, from_name, to_email, to_name, subject, message):
     print(f"Sending email from {from_name} <{from_email}> to {to_name} <{to_email}>")
-    print(message)
 
     server = smtplib.SMTP(smtphost)
     server.starttls()

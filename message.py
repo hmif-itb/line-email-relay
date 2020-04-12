@@ -24,7 +24,6 @@ class RelayMessageHandler:
         chat_bubble = ChatBubble(message=message, user_id=user_id, timestamp=int(time.time()))
         chat_bubble.save()
         self._schedule_message(self.message_timeout, user_id)
-        print("New chat!", message)
 
     def _relay_messages_to_email(self, user_id):
         chat_bubbles = ChatBubble.select().where(ChatBubble.user_id == user_id).order_by(ChatBubble.timestamp.asc())
@@ -60,7 +59,6 @@ class RelayMessageHandler:
         time_message_should_be_sent = time_since_last_message + self.message_timeout
         time_to_send = time_message_should_be_sent - int(time.time())
 
-        print("Get time to send", time_to_send)
         return time_to_send
 
     def _perform_schedule_check(self, user_id):
@@ -72,8 +70,6 @@ class RelayMessageHandler:
             self._schedule_message(time_to_send, user_id)
 
     def _schedule_message(self, seconds, user_id):
-        print(f"Scheduled checking for {user_id} in {seconds} seconds")
-
         if (user_id in timer_map):
             timer = timer_map[user_id]
             timer.cancel()
