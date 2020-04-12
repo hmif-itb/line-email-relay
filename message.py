@@ -1,20 +1,24 @@
 import time
 from threading import Timer
 import random
-from db import Participant, ChatBubble
+from db import ChatBubble
 from utils import generate_random_name
 from email_sender import send_email
+from db import Participant
+from linebot.models import TextSendMessage
 
 timer_map = dict()
 
-class RelayMessageSender:
+class RelayMessageHandler:
     message_timeout = 60 #seconds
 
-    def __init__(self, email_domain, to_email, to_name, timeout=60):
+    def __init__(self, line_bot_api, email_domain, to_email, to_name, timeout=60, enquiry_received_reply=None):
+        self.line_bot_api = line_bot_api
         self.message_timeout = timeout
         self.email_domain = email_domain
         self.to_email = to_email
         self.to_name = to_name
+        self.enquiry_received_reply = enquiry_received_reply
 
     def record_message(self, user_id, message):
         chat_bubble = ChatBubble(message=message, user_id=user_id, timestamp=int(time.time()))
@@ -44,7 +48,11 @@ class RelayMessageSender:
         recipient = f"{email_id}@{self.email_domain}"
         body = "\n".join(messages)
 
-        send_email(recipient, name, self.to_email, self.to_name, body)
+        subject = f"Incoming Message from {name}"
+        send_email(recipient, name, self.to_email, self.to_name, subject, body)
+
+        if (self.enquiry_received_reply):
+            self.line_bot_api.push_message(user_id, TextSendMessage(text=self.enquiry_received_reply))
 
     def _get_time_to_send(self, user_id):
         chat_bubble = ChatBubble.select().where(ChatBubble.user_id == user_id).order_by(ChatBubble.timestamp.desc()).get()

@@ -6,7 +6,7 @@ password = config.get('smtp_password')
 username = config.get('smtp_user')
 smtphost = f"{config.get('smtp_host')}:{config.get('smtp_port')}"
 
-def send_email(from_email, from_name, to_email, to_name, message):
+def send_email(from_email, from_name, to_email, to_name, subject, message):
     print(f"Sending email from {from_name} <{from_email}> to {to_name} <{to_email}>")
     print(message)
 
@@ -17,7 +17,7 @@ def send_email(from_email, from_name, to_email, to_name, message):
     msg = MIMEMultipart()
     msg['From'] = f"{from_name} <{from_email}>"
     msg['To'] = f"{to_name} <{to_email}>"
-    msg['Subject'] = f"Incoming Message from Anonymous {from_name}"
+    msg['Subject'] = subject
 
     msg.attach(MIMEText(message, 'plain'))
 

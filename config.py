@@ -3,7 +3,7 @@ import sys
 
 
 config = dict()
-config_keys = ['secret', 'access_token', 'email_domain', 'chat_timeout', 'smtp_host', 'smtp_port', 'smtp_user', 'smtp_password', 'recipient_email', 'recipient_name']
+config_keys = ['secret', 'access_token', 'email_domain', 'chat_timeout', 'smtp_host', 'smtp_port', 'smtp_user', 'smtp_password', 'recipient_email', 'recipient_name', 'enquiry_received_reply']
 
 if ('--dev' not in sys.argv):
     with open('.env', 'r') as envfile:
